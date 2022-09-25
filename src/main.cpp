@@ -50,7 +50,7 @@ void setup()
   }
   Serial.println(F("VS1053 found"));
 
-  musicPlayer.sineTest(0x44, 500); // Make a tone to indicate VS1053 is working
+  //musicPlayer.sineTest(0x44, 500); // Make a tone to indicate VS1053 is working
 
   if (!SD.begin(CARDCS))
   {
@@ -64,7 +64,7 @@ void setup()
   printDirectory(SD.open("/"), 0);
 
   // Set volume for left, right channels. lower numbers == louder volume!
-  musicPlayer.setVolume(255, 30);
+  musicPlayer.setVolume(255, 40);
 
   /***** Two interrupt options! *******/
   // This option uses timer0, this means timer1 & t2 are not required
@@ -87,7 +87,7 @@ void loop()
   // This doesn't happen in the background, instead, the entire
   // file is played and the program will continue when it's done!
   musicPlayer.playFullFile("ahhh001.mp3");
-  musicPlayer.playFullFile("fart001.mp3");
+  //musicPlayer.playFullFile("fart001.mp3");
 
   // Start playing a file, then we can do stuff while waiting for it to finish
   if (!musicPlayer.startPlayingFile("/choir001.mp3"))
