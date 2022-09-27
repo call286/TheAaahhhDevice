@@ -1,4 +1,10 @@
 #include <Arduino.h>
+
+#include <FastLED.h>
+#define NUM_LEDS 1
+#define LED_DATA_PIN D8
+
+CRGBArray<NUM_LEDS> leds;
 /***************************************************
   This is an example for the Adafruit VS1053 Codec Breakout
 
@@ -50,7 +56,7 @@ void setup()
   }
   Serial.println(F("VS1053 found"));
 
-  //musicPlayer.sineTest(0x44, 500); // Make a tone to indicate VS1053 is working
+  // musicPlayer.sineTest(0x44, 500); // Make a tone to indicate VS1053 is working
 
   if (!SD.begin(CARDCS))
   {
@@ -79,6 +85,9 @@ void setup()
   // *** This method is preferred
   if (!musicPlayer.useInterrupt(VS1053_FILEPLAYER_PIN_INT))
     Serial.println(F("DREQ pin is not an interrupt pin"));
+
+  FastLED.addLeds<WS2812, LED_DATA_PIN, GRB>(leds, NUM_LEDS); // GRB ordering is typical
+  FastLED.setBrightness(0);
 }
 
 void loop()
@@ -87,7 +96,7 @@ void loop()
   // This doesn't happen in the background, instead, the entire
   // file is played and the program will continue when it's done!
   musicPlayer.playFullFile("ahhh001.mp3");
-  //musicPlayer.playFullFile("fart001.mp3");
+  // musicPlayer.playFullFile("fart001.mp3");
 
   // Start playing a file, then we can do stuff while waiting for it to finish
   if (!musicPlayer.startPlayingFile("/choir001.mp3"))
@@ -103,7 +112,11 @@ void loop()
     // file is now playing in the 'background' so now's a good time
     // to do something else like handling LEDs or buttons :)
     Serial.print(".");
-    delay(1000);
+    FastLED.delay(33);
+    // Turn the LED on, then pause
+    leds[0] = CRGB::Orchid;
+    FastLED.show();
+    fadeToBlackBy(leds,1,20);
   }
   Serial.println("");
   Serial.println("Done playing music");
